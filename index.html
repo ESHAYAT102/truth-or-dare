@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Truth or Dare</title>
+  <link rel="icon" href="logo.png" />
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+    ::selection {
+      color: auto;
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar {
+      width: 0px;
+    }
+
+    body {
+      background-color: #171717;
+      color: whitesmoke;
+      font-family: "Montserrat", sans-serif;
+      font-weight: 100;
+      text-align: center;
+      padding: 50px;
+    }
+
+    #result {
+      font-size: 24px;
+      color: whitesmoke;
+      margin-top: 20px;
+    }
+
+    .result-box {
+      background-color: #1c2333;
+      color: whitesmoke;
+      border-radius: 20px;
+      padding: 80px;
+      margin-right: 30%;
+      margin-left: 30%;
+    }
+
+    #playerName {
+      max-width: 190px;
+      height: 20px;
+      background-color: #05060f9a;
+      border-radius: 100px;
+      padding: 14px;
+      border: 2px solid transparent;
+      font-size: 16px;
+      transition: border-color 0.3s cubic-bezier(0.25, 0.01, 0.25, 1) 0s,
+        color 0.3s cubic-bezier(0.25, 0.01, 0.25, 1) 0s,
+        background 0.2s cubic-bezier(0.25, 0.01, 0.25, 1) 0s;
+    }
+
+    #playerName:hover,
+    #playerName:focus,
+    #playerName-group:hover #playerName {
+      outline: none;
+      border-color: #05060f;
+    }
+
+    #playerName-group:hover #playerName,
+    #playerName:focus {
+      font-weight: 100;
+      color: whitesmoke;
+    }
+
+    #addPlayer {
+      margin-left: 10px;
+      width: 150px;
+      height: 48px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #fff;
+      cursor: pointer;
+      text-align: center;
+      border: none;
+      background-size: 300% 100%;
+      border-radius: 50px;
+      transition: all 0.4s ease-in-out;
+      -o-transition: all 0.4s ease-in-out;
+      -webkit-transition: all 0.4s ease-in-out;
+      transition: all 0.4s ease-in-out;
+    }
+
+    #addPlayer:hover {
+      background-position: 100% 0;
+      transition: all 0.4s ease-in-out;
+      -o-transition: all 0.4s ease-in-out;
+      -webkit-transition: all 0.4s ease-in-out;
+      transition: all 0.4s ease-in-out;
+    }
+
+    #addPlayer:focus {
+      outline: none;
+    }
+
+    #addPlayer {
+      background-image: linear-gradient(to right,
+          #25aae1,
+          #4481eb,
+          #04befe,
+          #3f86ed);
+      box-shadow: 0 4px 15px 0 rgba(65, 132, 234, 0.75);
+    }
+
+    #removePlayer {
+      margin-left: 10px;
+      width: 180px;
+      height: 48px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #fff;
+      cursor: pointer;
+      text-align: center;
+      border: none;
+      background-size: 300% 100%;
+      border-radius: 50px;
+      transition: all 0.4s ease-in-out;
+      -o-transition: all 0.4s ease-in-out;
+      -webkit-transition: all 0.4s ease-in-out;
+      transition: all 0.4s ease-in-out;
+    }
+
+    #removePlayer:hover {
+      background-position: 100% 0;
+      transition: all 0.4s ease-in-out;
+      -o-transition: all 0.4s ease-in-out;
+      -webkit-transition: all 0.4s ease-in-out;
+      transition: all 0.4s ease-in-out;
+    }
+
+    #removePlayer:focus {
+      outline: none;
+    }
+
+    #removePlayer {
+      background-image: linear-gradient(to right,
+          #eb3941,
+          #f15e64,
+          #e14e53,
+          #e2373f);
+      box-shadow: 0 5px 15px rgba(242, 97, 103, 0.4);
+    }
+
+    #truthButton {
+      margin: 20px;
+      padding: 15px 20px;
+      font-size: 16px;
+      background: transparent;
+      border: none;
+      position: relative;
+      color: whitesmoke;
+      z-index: 1;
+    }
+
+    #truthButton::after,
+    #truthButton::before {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      z-index: -99999;
+      transition: all 0.4s;
+    }
+
+    #truthButton::before {
+      transform: translate(0%, 0%);
+      width: 100%;
+      height: 100%;
+      background: teal;
+      border-radius: 100px;
+    }
+
+    #truthButton::after {
+      transform: translate(-48px, -20px);
+      width: 0px;
+      height: 0px;
+      background: #ffffff15;
+      backdrop-filter: blur(5px);
+      border-radius: 100px;
+    }
+
+    #truthButton:hover::before {
+      transform: translate(5%, 20%);
+      width: 110%;
+      height: 110%;
+    }
+
+    #truthButton:hover::after {
+      border-radius: 100px;
+      transform: translate(0, 0);
+      width: 100%;
+      height: 100%;
+    }
+
+    #truthButton:active::after {
+      transition: 0s;
+      transform: translate(0, 5%);
+    }
+
+    #dareButton {
+      margin: 20px;
+      padding: 15px 20px;
+      font-size: 16px;
+      background: transparent;
+      border: none;
+      position: relative;
+      color: whitesmoke;
+      z-index: 1;
+    }
+
+    #dareButton::after,
+    #dareButton::before {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      z-index: -99999;
+      transition: all 0.4s;
+    }
+
+    #dareButton::before {
+      transform: translate(0%, 0%);
+      width: 100%;
+      height: 100%;
+      background: teal;
+      border-radius: 100px;
+    }
+
+    #dareButton::after {
+      transform: translate(-42px, -20px);
+      width: 0px;
+      height: 0px;
+      background: #ffffff15;
+      backdrop-filter: blur(5px);
+      border-radius: 100px;
+    }
+
+    #dareButton:hover::before {
+      transform: translate(5%, 20%);
+      width: 110%;
+      height: 110%;
+    }
+
+    #dareButton:hover::after {
+      border-radius: 100px;
+      transform: translate(0, 0);
+      width: 100%;
+      height: 100%;
+    }
+
+    #dareButton:active::after {
+      transition: 0s;
+      transform: translate(0, 5%);
+    }
+
+    #failButton {
+      --red: #cf362b;
+      font-size: 18px;
+      padding: 14px 30px;
+      margin-right: 5px;
+      letter-spacing: 2px;
+      position: relative;
+      font-family: inherit;
+      border-radius: 100px;
+      overflow: hidden;
+      transition: all 0.3s;
+      line-height: 1.4em;
+      border: 2px solid var(--red);
+      background: linear-gradient(to right,
+          rgba(176, 28, 28, 0.1) 1%,
+          transparent 40%,
+          transparent 60%,
+          rgba(176, 28, 28, 0.1) 100%);
+      color: var(--red);
+      box-shadow: inset 0 0 10px rgba(176, 28, 28, 0.4),
+        0 0 9px 3px rgba(176, 28, 28, 0.1);
+    }
+
+    #failButton:hover {
+      color: #cf362b;
+      box-shadow: inset 0 0 10px rgba(176, 28, 28, 0.6),
+        0 0 9px 3px rgba(176, 28, 28, 0.2);
+    }
+
+    #failButton:before {
+      content: "";
+      position: absolute;
+      left: -4em;
+      width: 4em;
+      height: 100%;
+      top: 0;
+      transition: transform 0.4s ease-in-out;
+      background: linear-gradient(to right,
+          transparent 1%,
+          rgba(176, 28, 28, 0.1) 40%,
+          rgba(176, 28, 28, 0.1) 60%,
+          transparent 100%);
+    }
+
+    #failButton:hover:before {
+      transform: translateX(15em);
+    }
+
+    #completeButton {
+      --green: #1bfd9c;
+      font-size: 18px;
+      padding: 14px 30px;
+      margin-right: 5px;
+      letter-spacing: 2px;
+      position: relative;
+      font-family: inherit;
+      border-radius: 100px;
+      overflow: hidden;
+      transition: all 0.3s;
+      line-height: 1.4em;
+      border: 2px solid var(--green);
+      background: linear-gradient(to right,
+          rgba(27, 253, 156, 0.1) 1%,
+          transparent 40%,
+          transparent 60%,
+          rgba(27, 253, 156, 0.1) 100%);
+      color: var(--green);
+      box-shadow: inset 0 0 10px rgba(27, 253, 156, 0.4),
+        0 0 9px 3px rgba(27, 253, 156, 0.1);
+    }
+
+    #completeButton:hover {
+      color: #82ffc9;
+      box-shadow: inset 0 0 10px rgba(27, 253, 156, 0.6),
+        0 0 9px 3px rgba(27, 253, 156, 0.2);
+    }
+
+    #completeButton:before {
+      content: "";
+      position: absolute;
+      left: -4em;
+      width: 4em;
+      height: 100%;
+      top: 0;
+      transition: transform 0.4s ease-in-out;
+      background: linear-gradient(to right,
+          transparent 1%,
+          rgba(27, 253, 156, 0.1) 40%,
+          rgba(27, 253, 156, 0.1) 60%,
+          transparent 100%);
+    }
+
+    #completeButton:hover:before {
+      transform: translateX(15em);
+    }
+
+    #truthOrDareForm-box {
+      background-color: #1c2333;
+      color: whitesmoke;
+      width: 300px;
+      border-radius: 20px;
+      padding: 20px;
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+    }
+
+    #truthOrDareForm-header {
+      font-weight: 400;
+      font-size: 20px;
+    }
+
+    .radio-button-container {
+      display: flex;
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .radio-button {
+      display: inline-block;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .radioInput {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .radioLabel {
+      display: inline-block;
+      padding-left: 30px;
+      margin-bottom: 10px;
+      position: relative;
+      font-size: 15px;
+      color: #f2f2f2;
+      font-weight: 600;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+    }
+
+    .radioSpan {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid #555;
+      transition: all 0.3s ease;
+    }
+
+    .radioInput:checked+.radioLabel .radioSpan {
+      background-color: #4c8bf5;
+      border-color: transparent;
+      box-shadow: 0 0 20px #4c8bf580;
+    }
+
+    .radioInput:checked+.radioLabel {
+      color: #4c8bf5;
+    }
+
+    .radioLabel:hover .radioSpan {
+      transform: scale(1.2);
+      border-color: #4c8bf5;
+      box-shadow: 0 0 20px #4c8bf580;
+    }
+
+    #truthOrDareInput {
+      max-width: 220px;
+      height: 20px;
+      background-color: #05060f9a;
+      border-radius: 100px;
+      padding: 14px;
+      border: 2px solid transparent;
+      font-size: 16px;
+      transition: border-color 0.3s cubic-bezier(0.25, 0.01, 0.25, 1) 0s,
+        color 0.3s cubic-bezier(0.25, 0.01, 0.25, 1) 0s,
+        background 0.2s cubic-bezier(0.25, 0.01, 0.25, 1) 0s;
+    }
+
+    #truthOrDareInput:hover,
+    #truthOrDareInput:focus,
+    #truthOrDareInput-group:hover #truthOrDareInput {
+      outline: none;
+      border-color: #05060f;
+    }
+
+    #truthOrDareInput-group:hover #truthOrDareInput,
+    #truthOrDareInput:focus {
+      font-weight: 100;
+      color: whitesmoke;
+    }
+
+    #submit {
+      position: relative;
+      font-family: inherit;
+      font-weight: 500;
+      font-size: 18px;
+      letter-spacing: 1px;
+      border-radius: 100px;
+      cursor: pointer;
+      border: 1px solid black;
+      background: linear-gradient(to right, #8e2de2, #4a00e0);
+      color: ghostwhite;
+      overflow: hidden;
+    }
+
+    #submit span {
+      position: relative;
+      z-index: 10;
+      transition: color 0.4s;
+      display: inline-flex;
+      align-items: center;
+      padding: 0.8em 1.2em 0.8em 1.05em;
+    }
+
+    #submit::before,
+    #submit::after {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    #submit::before {
+      content: "";
+      background: #000;
+      width: 120%;
+      left: -10%;
+      transform: skew(30deg);
+      transition: transform 0.4s cubic-bezier(0.3, 1, 0.8, 1);
+    }
+
+    #submit:hover::before {
+      transform: translate3d(100%, 0, 0);
+    }
+
+    #submit:active {
+      transform: scale(0.95);
+    }
+
+    #cancel {
+      position: relative;
+      font-family: inherit;
+      font-weight: 500;
+      font-size: 18px;
+      letter-spacing: 1px;
+      border-radius: 100px;
+      cursor: pointer;
+      border: 1px solid black;
+      background: linear-gradient(to right, #e22d2d, #e00000);
+      color: ghostwhite;
+      overflow: hidden;
+    }
+
+    #cancel span {
+      position: relative;
+      z-index: 10;
+      transition: color 0.4s;
+      display: inline-flex;
+      align-items: center;
+      padding: 0.8em 1.2em 0.8em 1.05em;
+    }
+
+    #cancel::before,
+    #cancel::after {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    #cancel::before {
+      content: "";
+      background: #000;
+      width: 120%;
+      left: -10%;
+      transform: skew(30deg);
+      transition: transform 0.4s cubic-bezier(0.3, 1, 0.8, 1);
+    }
+
+    #cancel:hover::before {
+      transform: translate3d(100%, 0, 0);
+    }
+
+    #cancel:active {
+      transform: scale(0.95);
+    }
+
+        .removePlayer {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+    
+    </style>
+  </style>
+</head>
+
+<body>
+  <h1 style="margin-top: -30px; font-weight: 300">
+    Truth Or Dare By Eshayat
+  </h1>
+  <br />
+  <input autocomplete="off" id="playerName" type="text" placeholder="Enter player name" />
+  <button id="addPlayer" onclick="addPlayer()">ADD PLAYER</button>
+  <button id="removePlayer" onclick="removePlayer()">REMOVE PLAYER</button><br /><br />
+  <div id="players"></div>
+  <br /><br />
+  <button id="truthButton" onclick="generate('Truth')">TRUTH</button>
+  <button id="dareButton" onclick="generate('Dare')">DARE</button><br /><br /><br />
+  <div class="result-box">
+    <div id="result"></div>
+  </div>
+  <br /><br />
+  <button id="failButton" onclick="fail()" disabled>FAIL</button>
+  <button id="completeButton" onclick="complete()" disabled>COMPLETE</button><br /><br /><br />
+
+  <div id="truthOrDareForm-box">
+    <h2 id="truthOrDareForm-header">Register A Truth Or Dare</h2>
+    <p>Reloading the page will remove all the data from this session.</p>
+    <br /><br />
+    <form id="truthOrDareForm">
+      <div class="radio-button-container">
+        <div class="radio-button">
+          <input class="radioInput" type="radio" id="truthRadio" name="radio-group" value="Truth" />
+          <label class="radioLabel" id="truth-label" for="truthRadio">
+            <span class="radioSpan"></span>
+            Truth
+          </label>
+        </div>
+        <div class="radio-button">
+          <input class="radioInput" type="radio" id="dareRadio" name="radio-group" value="Dare" />
+          <label class="radioLabel" id="dare-label" for="dareRadio">
+            <span class="radioSpan"></span>
+            Dare
+          </label>
+        </div>
+      </div>
+      <br /><br />
+      <input type="text" id="truthOrDareInput" placeholder="Enter truth or dare" /><br /><br /><br /><br />
+      <button type="button" onclick="cancelInput()" id="cancel">
+        <span>Cancel</span>
+      </button>
+      <button type="button" onclick="registerTruthOrDare()" id="submit">
+        <span>Submit</span>
+      </button>
+    </form>
+  </div>
+
+  <script>
+    var truths = [
+      "What is your biggest fear?",
+      "What is your most embarrassing moment?",
+      "Who do you have a crush on?",
+      "What is the most embarrassing thing you've ever cooked?",
+      "What is your favorite fictional character?",
+      "What's the most useless talent you have?",
+      "Have you ever convinced someone of something ridiculous?",
+      "What childhood fear do you still secretly have?",
+      "What would your dream job be if money wasn't a factor?",
+      "What board game always turns into a competition for you?",
+      "What's the weirdest thing you've ever ordered online?",
+      "What's your proudest non-academic achievement?",
+      "What's one thing you're surprisingly good at?",
+      "What's your favorite thing to do when you're completely alone?",
+      "What movie can you quote way too much?",
+      "What's the most outrageous rumor you've heard about yourself?",
+      "What's a conspiracy theory you secretly believe in (for fun)?",
+      "What skill have you always wanted to learn but never gotten around to?",
+      "What's the most embarrassing thing you've accidentally said out loud?",
+      "What fictional character do you weirdly identify with?",
+      "Do you have a favorite outfit for feeling confident?",
+      "What's the strangest dream you can remember?",
+      "What's the most embarrassing song on your playlist?",
+      "What's one thing you're surprisingly bad at?",
+      "What's the weirdest thing you've ever eaten and actually enjoyed?",
+    ];
+    var dares = [
+      "Try to write a limerick (a funny five-line poem) on the spot.",
+      "Dance for 1 minute on a song that a player here recommends.",
+      "What is a food that you want to eat but you naver can't or won't.",
+      "Make a nickname for a player in this game.",
+      "Tell a joke you find funny, even if you think it might be cheesy.",
+      "Go to a shop and get something for every player.",
+      "Make a prank call.",
+      "Make a joke about a player.",
+      "Give the weather forecast for the next week, but only in hand gestures.",
+      "Give yourself a temporary nickname and explain why it suits you.",
+      "Teach everyone a fun fact you recently learned.",
+      "Tell a story that has exactly 3 plot twists.",
+      "Do your best impersonation of a movie trailer voice.",
+      "Tell a horror story with only funny sound effects.",
+      "Make up a conspiracy theory about a player in this game.",
+      "Make up a band name and genre based on your current outfit.",
+    ];
+    var players = [];
+    var currentPlayerIndex = 0;
+
+    function addPlayer() {
+      var playerName = document.getElementById("playerName").value;
+      if (playerName) {
+        players.push({name: playerName, points: 0});
+        document.getElementById("playerName").value = "";
+        updatePlayers();
+      }
+    }
+
+    function updatePlayers() {
+      var playerNames = players.map(function (player) {
+        return player.name + " (" + player.points + " points)";
+      });
+      document.getElementById("players").innerText =
+        "Players:\n" + playerNames.join("\n");
+    }
+
+    function generate(type) {
+      var action;
+      if (type === "Truth") {
+        action = truths[Math.floor(Math.random() * truths.length)];
+      } else {
+        action = dares[Math.floor(Math.random() * dares.length)];
+      }
+
+      var currentPlayer = players[currentPlayerIndex];
+      document.getElementById("result").innerText = action;
+
+      document.getElementById("completeButton").disabled = false;
+      document.getElementById("failButton").disabled = false;
+    }
+
+    function complete() {
+      players[currentPlayerIndex].points++;
+      nextPlayer();
+    }
+
+    function fail() {
+      players[currentPlayerIndex].points--;
+      nextPlayer();
+    }
+
+    function nextPlayer() {
+      currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+      document.getElementById("completeButton").disabled = true;
+      document.getElementById("failButton").disabled = true;
+      updatePlayers();
+    }
+
+    function removePlayer() {
+      if (players.length > 0) {
+        var playerIndex = prompt(
+          "Enter the index of the player you want to remove:"
+        );
+
+        if (playerIndex !== null && playerIndex !== "") {
+          playerIndex = parseInt(playerIndex);
+          if (
+            !isNaN(playerIndex) &&
+            playerIndex >= 0 &&
+            playerIndex < players.length
+          ) {
+            players.splice(playerIndex, 1);
+            currentPlayerIndex = 0;
+            updatePlayers();
+            return;
+          }
+        }
+
+        alert(
+          "Invalid input or player index. Please enter a valid player index."
+        );
+      }
+    }
+
+    function registerTruthOrDare() {
+      var truthOrDare = document.querySelector(
+        'input[name="radio-group"]:checked'
+      ).value;
+      var inputText = document.getElementById("truthOrDareInput").value;
+      if (inputText.trim() !== "") {
+        if (truthOrDare === "Truth") {
+          truths.push(inputText);
+        } else {
+          dares.push(inputText);
+        }
+        document.getElementById("truthOrDareInput").value = "";
+      }
+    }
+
+    function cancelInput() {
+      document.getElementById("truthOrDareInput").value = "";
+      document.getElementById("truthRadio").checked = false;
+      document.getElementById("dareRadio").checked = false;
+    }
+
+  </script>
+</body>
+
+</html>
